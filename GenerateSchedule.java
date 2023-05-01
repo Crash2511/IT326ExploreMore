@@ -2,47 +2,64 @@ package org.exploremore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.URL;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class GenerateSchedule {
-    GenerateSchedule(String txt) {
+    Location place = new Location();
+    int i = 0;
+    public Location GenerateSchedule(String[] location, String[] filters) {
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder()
-                    .build();
-            MediaType mediaType = MediaType.parse("text/plain");
-            RequestBody body = RequestBody.create(mediaType, "");
-            Request request = new Request.Builder()
-                    .url("https://maps.googleapis.com/maps/api/place/textsearch/json?input=church&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&key=AIzaSyAp98gEOtFN1KOQJZsyoQsDQfAxc7Ivb5M")
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
-            System.out.print(response);
+            String loc = "";
+            for (String word : location) {
+                loc += "%20" + word;
+            }
+            if ( filters.length == 0) {
+                // error, must select filters first
+            }
+            else {
+                for(String filter : filters) {
+                    String urlStr = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+filter+"&"+loc+"&radius=2000&key=AIzaSyAp98gEOtFN1KOQJZsyoQsDQfAxc7Ivb5M";
+                    OkHttpClient client = new OkHttpClient().newBuilder()
+                            .build();
+                    MediaType mediaType = MediaType.parse("text/plain");
+                    RequestBody body = RequestBody.create(mediaType, "");
+                    Request request = new Request.Builder()
+                            .url(urlStr)
+                            .method("GET", null)
+                            .build();
+                    Response response = client.newCall(request).execute();
+//                    System.out.print(response);
 
-            int responseCode = 0;
-            if ((responseCode = response.code()) == 200) {
+                    int responseCode = response.code();
+                    if ((responseCode) == 200) {
 
-                URL url = new URL("https://maps.googleapis.com/maps/api/place/textsearch/json?input=church&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&key=AIzaSyAp98gEOtFN1KOQJZsyoQsDQfAxc7Ivb5M");
-                String jsonStr = IOUtils.toString(url, UTF_8);
+                        URL url = new URL(urlStr);
 
-                JsonNode json = new ObjectMapper().readTree(url);
-                JsonNode res = json.get("results");
-                // getting address
+                        JsonNode json = new ObjectMapper().readTree(url);
+                        JsonNode res = json.get("results");
 
-                for(JsonNode x : res) {
-                    double rating = Double.valueOf(x.get("rating").asText());
-                    if (rating >= 4.0) {
-
-                        System.out.println(x.get("name"));
+                        for(JsonNode y : res) {
+                            double rating = Double.valueOf(y.get("rating").asText());
+                            if (rating >= 4.0) {
+                                place.setType(filter, i);
+                                place.setAddress(String.valueOf(y.get("formatted_address")), i);
+                                place.setName(String.valueOf(y.get("name")), i);
+//                                System.out.println((y.get("name"))+" "+y.get("formatted_address"));
+                                i++;
+                            }
+                        }
                     }
                 }
+
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
+        place.setI(i);
+        return place;
     }
 }
