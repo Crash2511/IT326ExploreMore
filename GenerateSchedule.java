@@ -21,7 +21,7 @@ public class GenerateSchedule {
             }
             else {
                 for(String filter : filters) {
-                    String urlStr = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+filter+"&"+loc+"&radius=2000&key=AIzaSyAp98gEOtFN1KOQJZsyoQsDQfAxc7Ivb5M";
+                    String urlStr = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+filter+"%20in"+loc+"&radius=2000&key=AIzaSyAp98gEOtFN1KOQJZsyoQsDQfAxc7Ivb5M";
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .build();
                     MediaType mediaType = MediaType.parse("text/plain");
