@@ -18,7 +18,8 @@ public class MainPage implements ActionListener{
 	JButton logoutButton = new JButton("Logout");
 	JTextField searchTxtField = new JTextField();
 	JLabel searchLabel = new JLabel("Search Location");
-
+	String[] filters = {"restaurants", "museums", "gyms"};
+	Boolean[] filterStatus = {false,false,false};
 	MainPage(String userID){
 
 
@@ -69,21 +70,21 @@ public class MainPage implements ActionListener{
 
 		if(e.getSource()==filterButton) {
 			// filter class should open screen with filter options
+			
 		}
 
 		if(e.getSource()==generateScheduleButton) {
 			// still need to get the filters
 			String txt = searchTxtField.getText();
 			String[] location = txt.split(" ");
-			String[] filters = {"restaurants", "museums", "gyms"};
-			GenerateSchedule schedule = new GenerateSchedule();
-			Location results = schedule.GenerateSchedule(location, filters);
 
-			int randNum[] = new int[13];
+			GenerateSchedule schedule = new GenerateSchedule();
+			Location results = schedule.GenerateSchedule(location, filters, filterStatus);
+
+			int[] randNum = new int[13];
 			for(int i = 0; i < 13; i++) {
 				Random randI = new Random();
-				int myRandInt = randNum[i] = randI.nextInt(results.i);;
-				System.out.println(randNum[i]);
+				randNum[i] = randI.nextInt(results.i);;
 			}
 
 			String[] columnNames = {"Time", "Name", "Address"};
@@ -104,7 +105,7 @@ public class MainPage implements ActionListener{
 					{"8PM", results.name[randNum[12]], results.address[randNum[12]]}
 			};
 			JTable table = new JTable(data, columnNames);
-			table.setBounds(screenSize.width/16, 140, 1400, 500);
+			table.setBounds(screenSize.width/16, 140, 1200, 400);
 			table.setRowHeight(30);
 			frame.add(table);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
