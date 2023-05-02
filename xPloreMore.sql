@@ -1,3 +1,4 @@
+-- Zach DeRose
 CREATE TABLE users ( -- user data
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(32) NOT NULL UNIQUE,
