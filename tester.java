@@ -1,3 +1,4 @@
+// Zach DeRose 
 import org.junit.Test;
 import static org.junit.Assert.*;
 public class ClassNameTest {
@@ -8,7 +9,6 @@ public class ClassNameTest {
         Login test = new Login(u, p);
         char[] testUser = null;
         char[] testPassword = null;
-        //line here
         boolean answer = test.login(testUser, testPassword);
         assertTrue(answer);
     }
