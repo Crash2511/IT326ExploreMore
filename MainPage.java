@@ -44,7 +44,9 @@ public class MainPage implements ActionListener{
 		// logout
 		logoutButton.setBounds(0,50,100,30);
 		logoutButton.setFocusable(false);
-		logoutButton.addActionListener(this);
+		logoutButton.addActionListener(e -> {
+			frame.dispose();
+		});
 
 		// select filters
 		filterButton.setBounds((screenSize.width/4)+700,100,100,30);
