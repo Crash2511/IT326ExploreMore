@@ -62,39 +62,39 @@ public class MainPage implements ActionListener{
 		logoutButton.addActionListener(this);
 
 		// select filters
-		logLabel.setBounds(1600,50,300,35);
+		logLabel.setBounds((screenSize.width/2)+650,50,300,35);
 		logLabel.setFont(new Font(null,Font.PLAIN, 30));
 		logLabel.setText("Filters");
 
-		restaurants.setBounds(1600, 110, 100, 30);
+		restaurants.setBounds((screenSize.width/2)+650, 110, 100, 30);
 		restaurants.setFocusable(false);
 		restaurants.addItemListener(this::itemStateChanged);
 
-		gym.setBounds(1600, 150, 100, 30);
+		gym.setBounds((screenSize.width/2)+650, 150, 100, 30);
 		gym.setFocusable(false);
 		gym.addItemListener(this::itemStateChanged);
 
-		museum.setBounds(1600, 190, 100, 30);
+		museum.setBounds((screenSize.width/2)+650, 190, 100, 30);
 		museum.setFocusable(false);
 		museum.addItemListener(this::itemStateChanged);
 
-		zoo.setBounds(1600, 230, 100, 30);
+		zoo.setBounds((screenSize.width/2)+650, 230, 100, 30);
 		zoo.setFocusable(false);
 		zoo.addItemListener(this::itemStateChanged);
 
-		bar.setBounds(1600, 270, 100, 30);
+		bar.setBounds((screenSize.width/2)+650, 270, 100, 30);
 		bar.setFocusable(false);
 		bar.addItemListener(this::itemStateChanged);
 
-		beach.setBounds(1600, 310, 100, 30);
+		beach.setBounds((screenSize.width/2)+650, 310, 100, 30);
 		beach.setFocusable(false);
 		beach.addItemListener(this::itemStateChanged);
 
-		park.setBounds(1600, 350, 100, 30);
+		park.setBounds((screenSize.width/2)+650, 350, 100, 30);
 		park.setFocusable(false);
 		park.addItemListener(this::itemStateChanged);
 
-		landmark.setBounds(1600, 390, 100, 30);
+		landmark.setBounds((screenSize.width/2)+650, 390, 100, 30);
 		landmark.setFocusable(false);
 		landmark.addItemListener(this::itemStateChanged);
 
@@ -141,19 +141,19 @@ public class MainPage implements ActionListener{
 			String[] columnNames = {"Time", "Name", "Address"};
 
 			Object[][] data = {
-					{"8AM", results.name[randNum[0]]+" ["+results.type[randNum[0]]+"]", results.address[randNum[0]]},
-					{"9AM", results.name[randNum[1]]+" ["+results.type[randNum[1]]+"]", results.address[randNum[1]]},
-					{"10AM", results.name[randNum[2]]+" ["+results.type[randNum[2]]+"]", results.address[randNum[2]]},
-					{"11AM", results.name[randNum[3]]+" ["+results.type[randNum[3]]+"]", results.address[randNum[3]]},
-					{"12PM", results.name[randNum[4]]+" ["+results.type[randNum[4]]+"]", results.address[randNum[4]]},
-					{"1PM", results.name[randNum[5]]+" ["+results.type[randNum[5]]+"]", results.address[randNum[5]]},
-					{"2PM", results.name[randNum[6]]+" ["+results.type[randNum[6]]+"]", results.address[randNum[6]]},
-					{"3AM", results.name[randNum[7]]+" ["+results.type[randNum[7]]+"]", results.address[randNum[7]]},
-					{"4PM", results.name[randNum[8]]+" ["+results.type[randNum[8]]+"]", results.address[randNum[8]]},
-					{"5PM", results.name[randNum[9]]+" ["+results.type[randNum[9]]+"]", results.address[randNum[9]]},
-					{"6PM", results.name[randNum[10]]+" ["+results.type[randNum[10]]+"]", results.address[randNum[10]]},
-					{"7PM", results.name[randNum[11]]+" ["+results.type[randNum[11]]+"]", results.address[randNum[11]]},
-					{"8PM", results.name[randNum[12]]+" ["+results.type[randNum[12]]+"]", results.address[randNum[12]]}
+					{"8AM", results.name[randNum[0]]+" ["+results.type[randNum[0]]+"]"+" ["+results.rating[randNum[0]]+"]", results.address[randNum[0]]},
+					{"9AM", results.name[randNum[1]]+" ["+results.type[randNum[1]]+"]"+" ["+results.rating[randNum[1]]+"]", results.address[randNum[1]]},
+					{"10AM", results.name[randNum[2]]+" ["+results.type[randNum[2]]+"]"+" ["+results.rating[randNum[2]]+"]", results.address[randNum[2]]},
+					{"11AM", results.name[randNum[3]]+" ["+results.type[randNum[3]]+"]"+" ["+results.rating[randNum[3]]+"]", results.address[randNum[3]]},
+					{"12PM", results.name[randNum[4]]+" ["+results.type[randNum[4]]+"]"+" ["+results.rating[randNum[4]]+"]", results.address[randNum[4]]},
+					{"1PM", results.name[randNum[5]]+" ["+results.type[randNum[5]]+"]"+" ["+results.rating[randNum[5]]+"]", results.address[randNum[5]]},
+					{"2PM", results.name[randNum[6]]+" ["+results.type[randNum[6]]+"]"+" ["+results.rating[randNum[6]]+"]", results.address[randNum[6]]},
+					{"3AM", results.name[randNum[7]]+" ["+results.type[randNum[7]]+"]"+" ["+results.rating[randNum[7]]+"]", results.address[randNum[7]]},
+					{"4PM", results.name[randNum[8]]+" ["+results.type[randNum[8]]+"]"+" ["+results.rating[randNum[8]]+"]", results.address[randNum[8]]},
+					{"5PM", results.name[randNum[9]]+" ["+results.type[randNum[9]]+"]"+" ["+results.rating[randNum[9]]+"]", results.address[randNum[9]]},
+					{"6PM", results.name[randNum[10]]+" ["+results.type[randNum[10]]+"]"+" ["+results.rating[randNum[10]]+"]", results.address[randNum[10]]},
+					{"7PM", results.name[randNum[11]]+" ["+results.type[randNum[11]]+"]"+" ["+results.rating[randNum[11]]+"]", results.address[randNum[11]]},
+					{"8PM", results.name[randNum[12]]+" ["+results.type[randNum[12]]+"]"+" ["+results.rating[randNum[12]]+"]", results.address[randNum[12]]}
 			};
 			JTable table = new JTable(data, columnNames);
 			table.setBounds(screenSize.width/16, 140, 1400, 500);
