@@ -50,6 +50,7 @@ public class GenerateSchedule {
                                         place.setType(filter, i);
                                         place.setAddress(String.valueOf(y.get("formatted_address")), i);
                                         place.setName(String.valueOf(y.get("name")), i);
+                                        place.setRating(Double.valueOf(y.get("rating").asText()), i);
 //                                System.out.println((y.get("name"))+" "+y.get("formatted_address"));
                                         i++;
                                     }
