@@ -3,6 +3,7 @@ package org.exploremore;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,12 +17,21 @@ public class MainPage implements ActionListener{
 	JButton generateScheduleButton = new JButton("Generate Schedule");
 	JButton curLocScheduleButton = new JButton("Generate Schedule w/ current location");
 	JButton logoutButton = new JButton("Logout");
+	JButton shareSchedule = new JButton("Share Shedule to User");
 	JTextField searchTxtField = new JTextField();
 	JLabel searchLabel = new JLabel("Search Location");
-	String[] filters = {"restaurants", "museums", "gyms"};
-	Boolean[] filterStatus = {false,false,false};
-	MainPage(String userID){
+	JCheckBox restaurants = new JCheckBox("Restaurant", false);
+	JCheckBox museum = new JCheckBox("Museum",false);
+	JCheckBox gym = new JCheckBox("Gym",false);
+	JCheckBox zoo = new JCheckBox("Zoo",false);
+	JCheckBox bar = new JCheckBox("Bar",false);
+	JCheckBox beach = new JCheckBox("Beach",false);
+	JCheckBox park = new JCheckBox("Park",false);
+	JCheckBox landmark = new JCheckBox("Landmark",false);
 
+	String[] filters = {"Restaurant", "Museum", "Gym", "Zoo", "Bar", "Beach", "Park", "Landmark"};
+	Boolean[] filterStatus ={false, false, false, false, false, false, false, false};
+	MainPage(String userID){
 
 		logoLabel.setBounds(0,0,300,35);
 		logoLabel.setFont(new Font(null,Font.PLAIN,35));
@@ -47,12 +57,47 @@ public class MainPage implements ActionListener{
 		logoutButton.addActionListener(e -> {
 			frame.dispose();
 		});
+		// Share Schedule
+		shareSchedule.setBounds((screenSize.width/2)-100,screenSize.height-300,200,50);
+		shareSchedule.setFocusable(false);
+		shareSchedule.addActionListener(this);
 
 		// select filters
 		filterButton.setBounds((screenSize.width/4)+700,100,100,30);
 		filterButton.setFocusable(false);
 		filterButton.addActionListener(this);
 
+		restaurants.setBounds(1200, 110, 100, 30);
+		restaurants.setFocusable(false);
+		restaurants.addItemListener(this::itemStateChanged);
+
+		gym.setBounds(1200, 150, 100, 30);
+		gym.setFocusable(false);
+		gym.addItemListener(this::itemStateChanged);
+
+		museum.setBounds(1200, 190, 100, 30);
+		museum.setFocusable(false);
+		museum.addItemListener(this::itemStateChanged);
+
+		zoo.setBounds(1200, 230, 100, 30);
+		zoo.setFocusable(false);
+		zoo.addItemListener(this::itemStateChanged);
+
+		bar.setBounds(1200, 270, 100, 30);
+		bar.setFocusable(false);
+		bar.addItemListener(this::itemStateChanged);
+
+		beach.setBounds(1200, 310, 100, 30);
+		beach.setFocusable(false);
+		beach.addItemListener(this::itemStateChanged);
+
+		park.setBounds(1200, 350, 100, 30);
+		park.setFocusable(false);
+		park.addItemListener(this::itemStateChanged);
+
+		landmark.setBounds(1200, 390, 100, 30);
+		landmark.setFocusable(false);
+		landmark.addItemListener(this::itemStateChanged);
 
 		frame.add(logoLabel);
 		frame.add(filterButton);
@@ -61,6 +106,15 @@ public class MainPage implements ActionListener{
 		frame.add(generateScheduleButton);
 		frame.add(curLocScheduleButton);
 		frame.add(logoutButton);
+		frame.add(shareSchedule);
+		frame.add(restaurants);
+		frame.add(gym);
+		frame.add(museum);
+		frame.add(zoo);
+		frame.add(bar);
+		frame.add(beach);
+		frame.add(park);
+		frame.add(landmark);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(screenSize.width, screenSize.height);
 		frame.setLayout(null);
@@ -114,7 +168,75 @@ public class MainPage implements ActionListener{
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
 		}
+		if(e.getSource()==shareSchedule){
+			new EmailSchedule();
 
+		}
 	}
-
+	public void itemStateChanged(ItemEvent e){
+		if (e.getSource() == gym) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[2] = true;
+			}
+			else{
+				filterStatus[2] = false;
+			}
+		}
+		if (e.getSource() == restaurants) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[0] = true;
+			}
+			else{
+				filterStatus[0] = false;
+			}
+		}
+		if (e.getSource() == museum) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[1] = true;
+			}
+			else{
+				filterStatus[1] = false;
+			}
+		}
+		if (e.getSource() == zoo) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[3] = true;
+			}
+			else{
+				filterStatus[3] = false;
+			}
+		}
+		if (e.getSource() == bar) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[4] = true;
+			}
+			else{
+				filterStatus[4] = false;
+			}
+		}
+		if (e.getSource() == beach) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[5] = true;
+			}
+			else{
+				filterStatus[5] = false;
+			}
+		}
+		if (e.getSource() == park) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[6] = true;
+			}
+			else{
+				filterStatus[6] = false;
+			}
+		}
+		if (e.getSource() == landmark) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				filterStatus[7] = true;
+			}
+			else{
+				filterStatus[7] = false;
+			}
+		}
+	}
 }
