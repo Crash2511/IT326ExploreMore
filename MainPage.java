@@ -4,11 +4,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class MainPage implements ActionListener{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -17,6 +19,7 @@ public class MainPage implements ActionListener{
 	//JButton filterButton = new JButton("Filters");
 	JLabel logLabel = new JLabel("Filters");
 	JButton generateScheduleButton = new JButton("Generate Schedule");
+	JButton listViewButton = new JButton("List View");
 	JButton curLocScheduleButton = new JButton("Generate Schedule w/ current location");
 	JButton logoutButton = new JButton("Logout");
 	JTextField searchTxtField = new JTextField();
@@ -51,6 +54,11 @@ public class MainPage implements ActionListener{
 		generateScheduleButton.setFocusable(false);
 		generateScheduleButton.addActionListener(this);
 
+		//list view button
+		listViewButton.setBounds((screenSize.width/2)-450, screenSize.height-250, 200, 100);
+		listViewButton.setFocusable(false);
+		listViewButton.addActionListener(this);
+
 		// generate based on current location
 		curLocScheduleButton.setBounds((screenSize.width/2),screenSize.height-250,250,100);
 		curLocScheduleButton.setFocusable(false);
@@ -62,39 +70,39 @@ public class MainPage implements ActionListener{
 		logoutButton.addActionListener(this);
 
 		// select filters
-		logLabel.setBounds((screenSize.width/2)+650,50,300,35);
+		logLabel.setBounds((screenSize.width/2)+670,50,300,35);
 		logLabel.setFont(new Font(null,Font.PLAIN, 30));
 		logLabel.setText("Filters");
 
-		restaurants.setBounds((screenSize.width/2)+650, 110, 100, 30);
+		restaurants.setBounds((screenSize.width/2)+670, 110, 100, 30);
 		restaurants.setFocusable(false);
 		restaurants.addItemListener(this::itemStateChanged);
 
-		gym.setBounds((screenSize.width/2)+650, 150, 100, 30);
+		gym.setBounds((screenSize.width/2)+670, 150, 100, 30);
 		gym.setFocusable(false);
 		gym.addItemListener(this::itemStateChanged);
 
-		museum.setBounds((screenSize.width/2)+650, 190, 100, 30);
+		museum.setBounds((screenSize.width/2)+670, 190, 100, 30);
 		museum.setFocusable(false);
 		museum.addItemListener(this::itemStateChanged);
 
-		zoo.setBounds((screenSize.width/2)+650, 230, 100, 30);
+		zoo.setBounds((screenSize.width/2)+670, 230, 100, 30);
 		zoo.setFocusable(false);
 		zoo.addItemListener(this::itemStateChanged);
 
-		bar.setBounds((screenSize.width/2)+650, 270, 100, 30);
+		bar.setBounds((screenSize.width/2)+670, 270, 100, 30);
 		bar.setFocusable(false);
 		bar.addItemListener(this::itemStateChanged);
 
-		beach.setBounds((screenSize.width/2)+650, 310, 100, 30);
+		beach.setBounds((screenSize.width/2)+670, 310, 100, 30);
 		beach.setFocusable(false);
 		beach.addItemListener(this::itemStateChanged);
 
-		park.setBounds((screenSize.width/2)+650, 350, 100, 30);
+		park.setBounds((screenSize.width/2)+670, 350, 100, 30);
 		park.setFocusable(false);
 		park.addItemListener(this::itemStateChanged);
 
-		landmark.setBounds((screenSize.width/2)+650, 390, 100, 30);
+		landmark.setBounds((screenSize.width/2)+670, 390, 100, 30);
 		landmark.setFocusable(false);
 		landmark.addItemListener(this::itemStateChanged);
 
@@ -112,8 +120,10 @@ public class MainPage implements ActionListener{
 		frame.add(searchLabel);
 		frame.add(searchTxtField);
 		frame.add(generateScheduleButton);
+		frame.add(listViewButton);
 		frame.add(curLocScheduleButton);
 		frame.add(logoutButton);
+		frame.getContentPane().setBackground(Color.pink);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(screenSize.width, screenSize.height);
 		frame.setLayout(null);
@@ -141,6 +151,7 @@ public class MainPage implements ActionListener{
 			String[] columnNames = {"Time", "Name", "Address"};
 
 			Object[][] data = {
+					{"Time", "Name", "Address"},
 					{"8AM", results.name[randNum[0]]+" ["+results.type[randNum[0]]+"]"+" ["+results.rating[randNum[0]]+"]", results.address[randNum[0]]},
 					{"9AM", results.name[randNum[1]]+" ["+results.type[randNum[1]]+"]"+" ["+results.rating[randNum[1]]+"]", results.address[randNum[1]]},
 					{"10AM", results.name[randNum[2]]+" ["+results.type[randNum[2]]+"]"+" ["+results.rating[randNum[2]]+"]", results.address[randNum[2]]},
@@ -148,85 +159,114 @@ public class MainPage implements ActionListener{
 					{"12PM", results.name[randNum[4]]+" ["+results.type[randNum[4]]+"]"+" ["+results.rating[randNum[4]]+"]", results.address[randNum[4]]},
 					{"1PM", results.name[randNum[5]]+" ["+results.type[randNum[5]]+"]"+" ["+results.rating[randNum[5]]+"]", results.address[randNum[5]]},
 					{"2PM", results.name[randNum[6]]+" ["+results.type[randNum[6]]+"]"+" ["+results.rating[randNum[6]]+"]", results.address[randNum[6]]},
-					{"3AM", results.name[randNum[7]]+" ["+results.type[randNum[7]]+"]"+" ["+results.rating[randNum[7]]+"]", results.address[randNum[7]]},
+					{"3PM", results.name[randNum[7]]+" ["+results.type[randNum[7]]+"]"+" ["+results.rating[randNum[7]]+"]", results.address[randNum[7]]},
 					{"4PM", results.name[randNum[8]]+" ["+results.type[randNum[8]]+"]"+" ["+results.rating[randNum[8]]+"]", results.address[randNum[8]]},
 					{"5PM", results.name[randNum[9]]+" ["+results.type[randNum[9]]+"]"+" ["+results.rating[randNum[9]]+"]", results.address[randNum[9]]},
 					{"6PM", results.name[randNum[10]]+" ["+results.type[randNum[10]]+"]"+" ["+results.rating[randNum[10]]+"]", results.address[randNum[10]]},
 					{"7PM", results.name[randNum[11]]+" ["+results.type[randNum[11]]+"]"+" ["+results.rating[randNum[11]]+"]", results.address[randNum[11]]},
 					{"8PM", results.name[randNum[12]]+" ["+results.type[randNum[12]]+"]"+" ["+results.rating[randNum[12]]+"]", results.address[randNum[12]]}
 			};
-			JTable table = new JTable(data, columnNames);
-			table.setBounds(screenSize.width/16, 140, 1400, 500);
-			table.setRowHeight(30);
-			frame.add(table);
+			JTable standard;
+			DefaultTableModel model;
+			model = new DefaultTableModel(data, columnNames);
+			standard = new JTable(model);
+			standard.setBounds(screenSize.width/16, 140, 1400, 420);
+			standard.setRowHeight(30);
+			frame.add(standard);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
+
+			listViewButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(e.getSource()==listViewButton) {
+						DefaultTableModel model = (DefaultTableModel) standard.getModel();
+						model.setRowCount(0);
+						model.setColumnCount(0);
+						String[] LISTcolumnNames = {"8AM", "9AM","10AM","11AM","12AM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM"};
+						Object[][] listData= {
+								{"8AM", "9AM","10AM","11AM","12AM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM"},
+								{results.name[randNum[0]], results.name[randNum[1]], results.name[randNum[2]], results.name[randNum[3]], results.name[randNum[4]], results.name[randNum[5]], results.name[randNum[6]], results.name[randNum[7]], results.name[randNum[8]], results.name[randNum[9]], results.name[randNum[10]], results.name[randNum[11]], results.name[randNum[12]] },
+								{results.type[randNum[0]], results.type[randNum[1]], results.type[randNum[2]], results.type[randNum[3]], results.type[randNum[4]], results.type[randNum[5]], results.type[randNum[6]], results.type[randNum[7]], results.type[randNum[8]], results.type[randNum[9]], results.type[randNum[10]], results.type[randNum[11]], results.type[randNum[12]] },
+								{results.rating[randNum[0]], results.rating[randNum[1]], results.rating[randNum[2]], results.rating[randNum[3]], results.rating[randNum[4]], results.rating[randNum[5]], results.rating[randNum[6]], results.rating[randNum[7]], results.rating[randNum[8]], results.rating[randNum[9]], results.rating[randNum[10]], results.rating[randNum[11]], results.rating[randNum[12]] },
+								{results.address[randNum[0]], results.address[randNum[1]], results.address[randNum[2]], results.address[randNum[3]], results.address[randNum[4]], results.address[randNum[5]], results.address[randNum[6]], results.address[randNum[7]], results.address[randNum[8]], results.address[randNum[9]], results.address[randNum[10]], results.address[randNum[11]], results.address[randNum[12]] },
+
+						};
+						model = new DefaultTableModel(listData, LISTcolumnNames);
+						JTable listView = new JTable(model);
+						listView.setBounds(screenSize.width/8-150, 600, 1600, 100);
+						listView.setRowHeight(20);
+						frame.add(listView);
+						frame.setVisible(true);
+					}
+				}
+			});
+
 		}
 
+		if(e.getSource()==logoutButton) {
+			frame.dispose();
+			IDandPassword idandPassword = new IDandPassword();
+			LoginPage loginPage = new LoginPage(idandPassword.getLoginInfo());
+		}
 	}
+
+
 	public void itemStateChanged(ItemEvent e){
 		if (e.getSource() == gym) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[2] = true;
-			}
-			else{
+			} else{
 				filterStatus[2] = false;
 			}
 		}
 		if (e.getSource() == restaurants) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[0] = true;
-			}
-			else{
+			} else{
 				filterStatus[0] = false;
 			}
 		}
 		if (e.getSource() == museum) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[1] = true;
-			}
-			else{
+			} else{
 				filterStatus[1] = false;
 			}
 		}
 		if (e.getSource() == zoo) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[3] = true;
-			}
-			else{
+			} else{
 				filterStatus[3] = false;
 			}
 		}
 		if (e.getSource() == bar) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[4] = true;
-			}
-			else{
+			} else{
 				filterStatus[4] = false;
 			}
 		}
 		if (e.getSource() == beach) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[5] = true;
-			}
-			else{
+			} else{
 				filterStatus[5] = false;
 			}
 		}
 		if (e.getSource() == park) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[6] = true;
-			}
-			else{
+			} else{
 				filterStatus[6] = false;
 			}
 		}
 		if (e.getSource() == landmark) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[7] = true;
-			}
-			else{
+			} else{
 				filterStatus[7] = false;
 			}
 		}
