@@ -1,5 +1,4 @@
 package org.exploremore;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -12,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class RegisterPage implements ActionListener {
-
 	private boolean areFieldsFilled() {
 		return !firstNameField.getText().trim().isEmpty() &&
 				!lastNameField.getText().trim().isEmpty() &&
@@ -20,16 +18,14 @@ public class RegisterPage implements ActionListener {
 				userPasswordField.getPassword().length > 0 &&
 				userConfirmPasswordField.getPassword().length > 0;
 	}
-
 	JFrame frame = new JFrame();
 	JLabel regLabel = new JLabel("Register");
-
 	JButton registerButton = new JButton("Register");
-	JButton resetButton = new JButton("Reset");
 
+
+	JButton resetButton = new JButton("Clear");
 	// if user has an existing - login
 	JButton loginButton = new JButton("Login");
-
 	JTextField firstNameField = new JTextField();
 	JTextField lastNameField = new JTextField();
 	JTextField userIDField = new JTextField();
@@ -37,17 +33,12 @@ public class RegisterPage implements ActionListener {
 	JPasswordField userConfirmPasswordField = new JPasswordField();
 	JLabel firstNameLabel = new JLabel("First Name:");
 	JLabel lastNameLabel = new JLabel("Last Name:");
-	JLabel userIDLabel = new JLabel("userID:");
-	JLabel userPasswordLabel = new JLabel("password:");
-	JLabel userConfirmPasswordLabel = new JLabel("confirm password:");
-
+	JLabel userIDLabel = new JLabel("Email:");
+	JLabel userPasswordLabel = new JLabel("Password:");
+	JLabel userConfirmPasswordLabel = new JLabel("Confirm:");
 	JLabel messageLabel = new JLabel();
 	HashMap<String,String> registerinfo = new HashMap<String,String>();
-
-	RegisterPage(HashMap<String,String> registerInfoOriginal){
-
-		registerinfo = registerInfoOriginal;
-
+	RegisterPage(){
 		regLabel.setBounds(175, 10, 300, 35);
 		regLabel.setFont(new Font(null, Font.PLAIN, 30));
 		regLabel.setText("Register");
@@ -75,7 +66,7 @@ public class RegisterPage implements ActionListener {
 		resetButton.setFocusable(false);
 		resetButton.addActionListener(this);
 
-		loginButton.setBounds(200, 310, 100, 25);
+		loginButton.setBounds(200, 285, 100, 25);
 		loginButton.setFocusable(false);
 		loginButton.addActionListener(this);
 
@@ -93,14 +84,13 @@ public class RegisterPage implements ActionListener {
 		frame.add(userConfirmPasswordField);
 		frame.add(registerButton);
 		frame.add(resetButton);
+
 		frame.add(loginButton);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 400);
 		frame.setLayout(null);
 		frame.setVisible(true);
-
 	}
-
 	private boolean isEmailAlreadyRegistered(String email) {
 		boolean isRegistered = false;
 		try {
@@ -123,10 +113,8 @@ public class RegisterPage implements ActionListener {
 		}
 		return isRegistered;
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getSource() == resetButton) {
 			firstNameField.setText("");
 			lastNameField.setText("");
@@ -134,7 +122,6 @@ public class RegisterPage implements ActionListener {
 			userPasswordField.setText("");
 			userConfirmPasswordField.setText("");
 		}
-
 		if (e.getSource() == registerButton) {
 			if (areFieldsFilled()) {
 				String firstName = firstNameField.getText();
@@ -143,7 +130,7 @@ public class RegisterPage implements ActionListener {
 				String password = new String(userPasswordField.getPassword());
 				String confirmPassword = new String(userConfirmPasswordField.getPassword());
 				if (isEmailAlreadyRegistered(userID)) {
-					messageLabel.setText("Email is already registered");
+					messageLabel.setText("Already Exists");
 				} else {
 					if (confirmPassword.equals(password)) {
 						User user = new User(firstName, lastName, userID, password);
@@ -159,26 +146,23 @@ public class RegisterPage implements ActionListener {
 									+ userID + "', '"
 									+ password + "')";
 							statement.executeUpdate(insertSql);
-							messageLabel.setText("User registered successfully");
+							messageLabel.setText("Registered");
 							ResultSet resultSetAfterUpdate = statement.executeQuery("SELECT * FROM user");
 							System.out.println(resultSetAfterUpdate.getString(1) + " " + resultSetAfterUpdate.getString(2) + " " + resultSetAfterUpdate.getString(3) + " " + resultSetAfterUpdate.getString(4));
 							connection.close();
-
 						} catch (Exception exc) {
 							System.out.println(exc);
 						}
 					} else {
-						messageLabel.setText("Passwords do not match");
+						messageLabel.setText("Check Password"); //passwords dont match
 					}
 				}
-			} else {
-				messageLabel.setText("All fields must be filled out");
+			}else{
+				messageLabel.setText("Empty Fields!"); //for if user forgets to put all info in
 			}
 		}
-
 		if (e.getSource() == loginButton) {
-			IDandPassword idandPassword = new IDandPassword();
-			LoginPage loginPage = new LoginPage(idandPassword.getLoginInfo());
+			LoginPage loginPage = new LoginPage();
 			frame.dispose(); // Close the RegisterPage frame
 		}
 	}
