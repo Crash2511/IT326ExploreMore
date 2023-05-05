@@ -4,8 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -13,9 +12,8 @@ public class MainPage implements ActionListener{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame frame = new JFrame();
 	JLabel logoLabel = new JLabel("ExploreMore");
-	JButton filterButton = new JButton("Filters");
 	JButton generateScheduleButton = new JButton("Generate Schedule");
-	JButton curLocScheduleButton = new JButton("Generate Schedule w/ current location");
+	JButton createAvailability = new JButton("Create Availability");
 	JButton logoutButton = new JButton("Logout");
 	JButton shareSchedule = new JButton("Share Shedule to User");
 	JTextField searchTxtField = new JTextField();
@@ -28,9 +26,12 @@ public class MainPage implements ActionListener{
 	JCheckBox beach = new JCheckBox("Beach",false);
 	JCheckBox park = new JCheckBox("Park",false);
 	JCheckBox landmark = new JCheckBox("Landmark",false);
-
+	String[] availabilityTimes = {"8AM","9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM"};
+	Boolean[] availabilityCheck ={true,true,true,true,true,true,true,true,true,true,true,true,true};
+	//Boolean[] availabilityCheck = {false,false,false,false,false,false,false,false,false,false,false,false,false};
 	String[] filters = {"Restaurant", "Museum", "Gym", "Zoo", "Bar", "Beach", "Park", "Landmark"};
 	Boolean[] filterStatus ={false, false, false, false, false, false, false, false};
+
 	MainPage(String userID){
 
 		logoLabel.setBounds(0,0,300,35);
@@ -47,9 +48,9 @@ public class MainPage implements ActionListener{
 		generateScheduleButton.addActionListener(this);
 
 		// generate based on current location
-		curLocScheduleButton.setBounds((screenSize.width/2),screenSize.height-250,250,100);
-		curLocScheduleButton.setFocusable(false);
-		curLocScheduleButton.addActionListener(this);
+		createAvailability.setBounds((screenSize.width/2),screenSize.height-250,250,100);
+		createAvailability.setFocusable(false);
+		createAvailability.addActionListener(this);
 
 		// logout
 		logoutButton.setBounds(0,50,100,30);
@@ -62,49 +63,43 @@ public class MainPage implements ActionListener{
 		shareSchedule.setFocusable(false);
 		shareSchedule.addActionListener(this);
 
-		// select filters
-		filterButton.setBounds((screenSize.width/4)+700,100,100,30);
-		filterButton.setFocusable(false);
-		filterButton.addActionListener(this);
-
-		restaurants.setBounds(1200, 110, 100, 30);
+		restaurants.setBounds((screenSize.width/2)+650, 110, 100, 30);
 		restaurants.setFocusable(false);
 		restaurants.addItemListener(this::itemStateChanged);
 
-		gym.setBounds(1200, 150, 100, 30);
+		gym.setBounds((screenSize.width/2)+650, 150, 100, 30);
 		gym.setFocusable(false);
 		gym.addItemListener(this::itemStateChanged);
 
-		museum.setBounds(1200, 190, 100, 30);
+		museum.setBounds((screenSize.width/2)+650, 190, 100, 30);
 		museum.setFocusable(false);
 		museum.addItemListener(this::itemStateChanged);
 
-		zoo.setBounds(1200, 230, 100, 30);
+		zoo.setBounds((screenSize.width/2)+650, 230, 100, 30);
 		zoo.setFocusable(false);
 		zoo.addItemListener(this::itemStateChanged);
 
-		bar.setBounds(1200, 270, 100, 30);
+		bar.setBounds((screenSize.width/2)+650, 270, 100, 30);
 		bar.setFocusable(false);
 		bar.addItemListener(this::itemStateChanged);
 
-		beach.setBounds(1200, 310, 100, 30);
+		beach.setBounds((screenSize.width/2)+650, 310, 100, 30);
 		beach.setFocusable(false);
 		beach.addItemListener(this::itemStateChanged);
 
-		park.setBounds(1200, 350, 100, 30);
+		park.setBounds((screenSize.width/2)+650, 350, 100, 30);
 		park.setFocusable(false);
 		park.addItemListener(this::itemStateChanged);
 
-		landmark.setBounds(1200, 390, 100, 30);
+		landmark.setBounds((screenSize.width/2)+650, 390, 100, 30);
 		landmark.setFocusable(false);
 		landmark.addItemListener(this::itemStateChanged);
 
 		frame.add(logoLabel);
-		frame.add(filterButton);
 		frame.add(searchLabel);
 		frame.add(searchTxtField);
 		frame.add(generateScheduleButton);
-		frame.add(curLocScheduleButton);
+		frame.add(createAvailability);
 		frame.add(logoutButton);
 		frame.add(shareSchedule);
 		frame.add(restaurants);
@@ -124,13 +119,17 @@ public class MainPage implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if(e.getSource()==filterButton) {
+		if(e.getSource()==createAvailability) {
 			// filter class should open screen with filter options
-			
+
+			CreateAvailability availability = new CreateAvailability(availabilityCheck);
+			availabilityCheck = availability.getAvailability();
+			createAvailability.setText("EditAvailability");
 		}
 
 		if(e.getSource()==generateScheduleButton) {
-			// still need to get the filters
+
+			// get the location, if null then generate based on user location
 			String txt = searchTxtField.getText();
 			String[] location = txt.split(" ");
 
@@ -138,31 +137,49 @@ public class MainPage implements ActionListener{
 			Location results = schedule.GenerateSchedule(location, filters, filterStatus);
 
 			int[] randNum = new int[13];
+			int size = results.i;
+
+			ArrayList<Integer> list = new ArrayList<Integer>(size);
+			for(int i = 0; i < size; i++) {
+				list.add(i);
+			}
+			Collections.shuffle(list);
+			Random rand = new Random();
 			for(int i = 0; i < 13; i++) {
-				Random randI = new Random();
-				randNum[i] = randI.nextInt(results.i);;
+				randNum[i] = list.remove(0);
+//				list.remove(randNum[i]);
+				System.out.println(randNum[i]);
+				if(availabilityCheck[i] == false) {
+					results.name[randNum[i]] = "X";
+					results.type[randNum[i]] = "X";
+					results.rating[randNum[i]] = 0.0;
+					results.address[randNum[i]] = "X";
+				}
+
 			}
 
 			String[] columnNames = {"Time", "Name", "Address"};
 
 			Object[][] data = {
-					{"8AM", results.name[randNum[0]], results.address[randNum[0]]},
-					{"9AM", results.name[randNum[1]], results.address[randNum[1]]},
-					{"10AM", results.name[randNum[2]], results.address[randNum[2]]},
-					{"11AM", results.name[randNum[3]], results.address[randNum[3]]},
-					{"12PM", results.name[randNum[4]], results.address[randNum[4]]},
-					{"1PM", results.name[randNum[5]], results.address[randNum[5]]},
-					{"2PM", results.name[randNum[6]], results.address[randNum[6]]},
-					{"3AM", results.name[randNum[7]], results.address[randNum[7]]},
-					{"4PM", results.name[randNum[8]], results.address[randNum[8]]},
-					{"5PM", results.name[randNum[9]], results.address[randNum[9]]},
-					{"6PM", results.name[randNum[10]], results.address[randNum[10]]},
-					{"7PM", results.name[randNum[11]], results.address[randNum[11]]},
-					{"8PM", results.name[randNum[12]], results.address[randNum[12]]}
+					{"8AM", results.name[randNum[0]]+" ["+results.type[randNum[0]]+"]"+" ["+results.rating[randNum[0]]+"]", results.address[randNum[0]]},
+					{"9AM", results.name[randNum[1]]+" ["+results.type[randNum[1]]+"]"+" ["+results.rating[randNum[1]]+"]", results.address[randNum[1]]},
+					{"10AM", results.name[randNum[2]]+" ["+results.type[randNum[2]]+"]"+" ["+results.rating[randNum[2]]+"]", results.address[randNum[2]]},
+					{"11AM", results.name[randNum[3]]+" ["+results.type[randNum[3]]+"]"+" ["+results.rating[randNum[3]]+"]", results.address[randNum[3]]},
+					{"12PM", results.name[randNum[4]]+" ["+results.type[randNum[4]]+"]"+" ["+results.rating[randNum[4]]+"]", results.address[randNum[4]]},
+					{"1PM", results.name[randNum[5]]+" ["+results.type[randNum[5]]+"]"+" ["+results.rating[randNum[5]]+"]", results.address[randNum[5]]},
+					{"2PM", results.name[randNum[6]]+" ["+results.type[randNum[6]]+"]"+" ["+results.rating[randNum[6]]+"]", results.address[randNum[6]]},
+					{"3AM", results.name[randNum[7]]+" ["+results.type[randNum[7]]+"]"+" ["+results.rating[randNum[7]]+"]", results.address[randNum[7]]},
+					{"4PM", results.name[randNum[8]]+" ["+results.type[randNum[8]]+"]"+" ["+results.rating[randNum[8]]+"]", results.address[randNum[8]]},
+					{"5PM", results.name[randNum[9]]+" ["+results.type[randNum[9]]+"]"+" ["+results.rating[randNum[9]]+"]", results.address[randNum[9]]},
+					{"6PM", results.name[randNum[10]]+" ["+results.type[randNum[10]]+"]"+" ["+results.rating[randNum[10]]+"]", results.address[randNum[10]]},
+					{"7PM", results.name[randNum[11]]+" ["+results.type[randNum[11]]+"]"+" ["+results.rating[randNum[11]]+"]", results.address[randNum[11]]},
+					{"8PM", results.name[randNum[12]]+" ["+results.type[randNum[12]]+"]"+" ["+results.rating[randNum[12]]+"]", results.address[randNum[12]]}
 			};
+
 			JTable table = new JTable(data, columnNames);
 			table.setBounds(screenSize.width/16, 140, 1200, 400);
 			table.setRowHeight(30);
+			generateScheduleButton.setText("Reroll Schedule");
 			frame.add(table);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null);
@@ -170,71 +187,67 @@ public class MainPage implements ActionListener{
 		}
 		if(e.getSource()==shareSchedule){
 			new EmailSchedule();
+		}
+		if(e.getSource()==rerollSchedule) {
 
 		}
+
 	}
+
 	public void itemStateChanged(ItemEvent e){
 		if (e.getSource() == gym) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[2] = true;
-			}
-			else{
+			} else{
 				filterStatus[2] = false;
 			}
 		}
 		if (e.getSource() == restaurants) {
-			if (e.getStateChange() == ItemEvent.SELECTED) {
+			if (e.getStateChange() == ItemEvent.ITEM_STATE_CHANGED==true) {
 				filterStatus[0] = true;
-			}
-			else{
+			} else{
 				filterStatus[0] = false;
 			}
 		}
 		if (e.getSource() == museum) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[1] = true;
-			}
-			else{
+			} else{
 				filterStatus[1] = false;
 			}
 		}
 		if (e.getSource() == zoo) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[3] = true;
-			}
-			else{
+			} else{
 				filterStatus[3] = false;
 			}
 		}
 		if (e.getSource() == bar) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[4] = true;
-			}
-			else{
+			} else{
 				filterStatus[4] = false;
 			}
 		}
 		if (e.getSource() == beach) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[5] = true;
-			}
-			else{
+			} else{
 				filterStatus[5] = false;
 			}
 		}
 		if (e.getSource() == park) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[6] = true;
-			}
-			else{
+			} else{
 				filterStatus[6] = false;
 			}
 		}
 		if (e.getSource() == landmark) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				filterStatus[7] = true;
-			}
-			else{
+			} else{
 				filterStatus[7] = false;
 			}
 		}
