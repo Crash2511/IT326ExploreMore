@@ -46,7 +46,7 @@ public class GenerateSchedule {
 
                                 for (JsonNode y : res) {
                                     double rating = Double.valueOf(y.get("rating").asText());
-                                    if (rating >= 4.0) {
+                                    if (rating >= 3.5) {
                                         place.setType(filter, i);
                                         place.setAddress(String.valueOf(y.get("formatted_address")), i);
                                         place.setName(String.valueOf(y.get("name")), i);
