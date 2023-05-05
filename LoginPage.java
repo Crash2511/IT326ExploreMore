@@ -3,12 +3,6 @@ package org.exploremore;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 
 public class LoginPage implements ActionListener {
 	JFrame frame = new JFrame();
@@ -20,7 +14,7 @@ public class LoginPage implements ActionListener {
 	JLabel userIDLabel = new JLabel("userID:");
 	JLabel userPasswordLabel = new JLabel("password:");
 	JLabel messageLabel = new JLabel();
-	HashMap<String, String> logininfo;
+
 	LoginPage() {
 		userIDLabel.setBounds(50, 100, 75, 25);
 		userPasswordLabel.setBounds(50, 140, 75, 25);
@@ -51,39 +45,29 @@ public class LoginPage implements ActionListener {
 		frame.setLayout(null);
 		frame.setVisible(true);
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == loginButton) {
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection connection = DriverManager.getConnection(//jdbcdemo=database name.  explorer=username for admin.   rhett=password for admin    localhost=connection
-						"jdbc:mysql://localhost:3306/jdbcdemo", "explorer", "rhett"
-				);
-				String query = "SELECT * FROM user WHERE email = ? AND password = ?";
-				PreparedStatement statement = connection.prepareStatement(query);
-				statement.setString(1, userID);
-				statement.setString(2, password);
-				ResultSet resultSet = statement.executeQuery();
-				if (resultSet.next()) {
-					messageLabel.setForeground(Color.green);
-					messageLabel.setText("Login successful");
-					MainPage mainPage = new MainPage(userID);
-					frame.dispose(); // Close the RegisterPage frame
-				} else {
-					messageLabel.setForeground(Color.red);
-					messageLabel.setText("Invalid email or password");
-				}
-				connection.close();
-			} catch (ClassNotFoundException | SQLException ex) {
-				System.out.println(ex);
+
+			if (DatabaseController.validateUser(userID, password)) {
+				messageLabel.setForeground(Color.green);
+				messageLabel.setText("Login successful");
+				MainPage mainPage = new MainPage(userID);
+				frame.dispose(); // Close the LoginPage frame
+			} else {
+				messageLabel.setForeground(Color.red);
+				messageLabel.setText("Invalid email or password");
 			}
 		}
+
 		if (e.getSource() == registerButton) {
 			RegisterPage registerPage = new RegisterPage();
 			frame.dispose();
 		}
+
 		if (e.getSource() == resetPasswordButton) {
 			ResetPassword resetPassword = new ResetPassword();
 			frame.dispose();

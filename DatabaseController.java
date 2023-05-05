@@ -31,6 +31,33 @@ public class DatabaseController {
         }
     }
 
+    public static boolean validateUser(String email, String password) {
+        boolean isValid = false;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/jdbcdemo", "explorer", "rhett"
+            );
+            String query = "SELECT * FROM user WHERE email = ? AND password = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, email);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                isValid = true;
+            }
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex);
+        }
+
+        return isValid;
+    }
+
+
     public static void insertUser(User user) {
         String insertSql = "INSERT INTO user (fname, lname, email, password) VALUES (?, ?, ?, ?)";
 

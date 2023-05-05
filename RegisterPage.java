@@ -1,14 +1,9 @@
+// RegisterPage.java
 package org.exploremore;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.*;
 import javax.swing.*;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class RegisterPage implements ActionListener {
 	private boolean areFieldsFilled() {
@@ -18,13 +13,11 @@ public class RegisterPage implements ActionListener {
 				userPasswordField.getPassword().length > 0 &&
 				userConfirmPasswordField.getPassword().length > 0;
 	}
+
 	JFrame frame = new JFrame();
 	JLabel regLabel = new JLabel("Register");
 	JButton registerButton = new JButton("Register");
-
-
 	JButton resetButton = new JButton("Clear");
-	// if user has an existing - login
 	JButton loginButton = new JButton("Login");
 	JTextField firstNameField = new JTextField();
 	JTextField lastNameField = new JTextField();
@@ -37,11 +30,10 @@ public class RegisterPage implements ActionListener {
 	JLabel userPasswordLabel = new JLabel("Password:");
 	JLabel userConfirmPasswordLabel = new JLabel("Confirm:");
 	JLabel messageLabel = new JLabel();
-	HashMap<String,String> registerinfo = new HashMap<String,String>();
-	RegisterPage(){
+
+	RegisterPage() {
 		regLabel.setBounds(175, 10, 300, 35);
 		regLabel.setFont(new Font(null, Font.PLAIN, 30));
-		regLabel.setText("Register");
 
 		firstNameLabel.setBounds(50, 60, 100, 25);
 		lastNameLabel.setBounds(50, 100, 100, 25);
@@ -84,35 +76,13 @@ public class RegisterPage implements ActionListener {
 		frame.add(userConfirmPasswordField);
 		frame.add(registerButton);
 		frame.add(resetButton);
-
 		frame.add(loginButton);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 400);
 		frame.setLayout(null);
 		frame.setVisible(true);
 	}
-	private boolean isEmailAlreadyRegistered(String email) {
-		boolean isRegistered = false;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/jdbcdemo", "explorer", "rhett"
-			);
-			String selectSql = "SELECT * FROM user WHERE email = ?";
-			PreparedStatement preparedStatement = connection.prepareStatement(selectSql);
-			preparedStatement.setString(1, email);
-			ResultSet resultSet = preparedStatement.executeQuery();
 
-			if (resultSet.next()) {
-				isRegistered = true;
-			}
-
-			connection.close();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-		return isRegistered;
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == resetButton) {
@@ -122,6 +92,7 @@ public class RegisterPage implements ActionListener {
 			userPasswordField.setText("");
 			userConfirmPasswordField.setText("");
 		}
+
 		if (e.getSource() == registerButton) {
 			if (areFieldsFilled()) {
 				String firstName = firstNameField.getText();
@@ -129,35 +100,19 @@ public class RegisterPage implements ActionListener {
 				String userID = userIDField.getText();
 				String password = new String(userPasswordField.getPassword());
 				String confirmPassword = new String(userConfirmPasswordField.getPassword());
-				if (isEmailAlreadyRegistered(userID)) {
+
+				if (DatabaseController.isEmailAlreadyRegistered(userID)) {
 					messageLabel.setText("Already Exists");
 				} else {
 					if (confirmPassword.equals(password)) {
 						User user = new User(firstName, lastName, userID, password);
-						try {
-							Class.forName("com.mysql.cj.jdbc.Driver");
-							Connection connection = DriverManager.getConnection(
-									"jdbc:mysql://localhost:3306/jdbcdemo", "explorer", "rhett"
-							);
-							Statement statement = connection.createStatement();
-							String insertSql = "INSERT INTO user (fname, lname, email, password) VALUES ('"
-									+ firstName + "', '"
-									+ lastName + "', '"
-									+ userID + "', '"
-									+ password + "')";
-							statement.executeUpdate(insertSql);
-							messageLabel.setText("Registered");
-							ResultSet resultSetAfterUpdate = statement.executeQuery("SELECT * FROM user");
-							System.out.println(resultSetAfterUpdate.getString(1) + " " + resultSetAfterUpdate.getString(2) + " " + resultSetAfterUpdate.getString(3) + " " + resultSetAfterUpdate.getString(4));
-							connection.close();
-						} catch (Exception exc) {
-							System.out.println(exc);
-						}
+						DatabaseController.insertUser(user);
+						messageLabel.setText("Registered");
 					} else {
-						messageLabel.setText("Check Password"); //passwords dont match
+						messageLabel.setText("Check Password"); //passwords don't match
 					}
 				}
-			}else{
+			} else {
 				messageLabel.setText("Empty Fields!"); //for if user forgets to put all info in
 			}
 		}
@@ -166,4 +121,6 @@ public class RegisterPage implements ActionListener {
 			frame.dispose(); // Close the RegisterPage frame
 		}
 	}
+
+
 }
