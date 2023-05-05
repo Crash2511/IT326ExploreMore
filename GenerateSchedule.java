@@ -45,10 +45,11 @@ public class GenerateSchedule {
                             for (JsonNode y : res) {
                                 double rating = Double.valueOf(y.get("rating").asText());
                                 if (rating >= 4.0) {
+
                                     place.setType(filter, i);
                                     place.setAddress(String.valueOf(y.get("formatted_address")), i);
                                     place.setName(String.valueOf(y.get("name")), i);
-                                    //                                System.out.println((y.get("name"))+" "+y.get("formatted_address"));
+                                    place.setRating(Double.valueOf(y.get("rating").asText()), i);
                                     i++;
                                 }
                             }
