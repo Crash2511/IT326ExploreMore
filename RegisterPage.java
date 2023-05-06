@@ -1,5 +1,5 @@
 package org.exploremore;
-
+//Program and comments by Clay Remen
 import org.checkerframework.checker.units.qual.C;
 
 import java.awt.*;
@@ -72,7 +72,7 @@ public class RegisterPage implements ActionListener {
 		lastNameField.setBounds(150, 100, 200, 25);
 		userIDField.setBounds(150, 140, 200, 25);
 		userPasswordField.setBounds(150, 180, 200, 25);
-		userConfirmPasswordField.setBounds(200, 220, 150, 25);
+		userConfirmPasswordField.setBounds(150, 220, 200, 25);
 
 		registerButton.setBounds(150, 260, 100, 25);
 		registerButton.setFocusable(false);

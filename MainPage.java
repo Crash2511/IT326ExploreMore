@@ -30,6 +30,7 @@ public class MainPage implements ActionListener{
 	JButton listViewButton = new JButton("List View");
 	JButton logoutButton = new JButton("Logout");
 	JButton updateUserButton = new JButton("UPDATE");
+	JButton deleteScheduleButton = new JButton("Delete Schedule");
 	JButton deleteUserButton = new JButton("DELETE");
 	JTextField searchTxtField = new JTextField();
 	JLabel searchLabel = new JLabel("Search Location");
@@ -110,7 +111,12 @@ public class MainPage implements ActionListener{
 		deleteUserButton.addActionListener(this);
 		deleteUserButton.setBackground(Color.black);
 		deleteUserButton.setForeground(Color.white);
-
+		// delete schedule
+		deleteScheduleButton.setBounds((screenSize.width/2)+800,screenSize.height-250,250,100);
+		deleteScheduleButton.setFocusable(false);
+		deleteScheduleButton.addActionListener(this);
+		deleteScheduleButton.setBackground(Color.black);
+		deleteScheduleButton.setForeground(Color.white);
 		// select filters
 		logLabel.setBounds((screenSize.width/2)+670,50,300,35);
 		logLabel.setFont(new Font(null,Font.PLAIN, 30));
@@ -192,6 +198,7 @@ public class MainPage implements ActionListener{
 		frame.add(logoutButton);
 		frame.add(updateUserButton);
 		frame.add(deleteUserButton);
+		frame.add(deleteScheduleButton);
 		frame.add(sendEmailButton);
 		frame.add(reminder);
 		frame.add(exportButton);
@@ -345,6 +352,14 @@ public class MainPage implements ActionListener{
 		if(e.getSource()==deleteUserButton) {
 			frame.dispose();
 			DeleteUser deleteUser = new DeleteUser();
+		}
+		if(e.getSource()==deleteScheduleButton){
+			DefaultTableModel model = new DefaultTableModel();
+			JTable table = new JTable(model);
+			frame.add(table);
+			table.setBackground(Color.black);
+			table.setForeground(Color.white);
+			table.setBounds(screenSize.width/16, 140, 1400, 420);
 		}
 	}
 

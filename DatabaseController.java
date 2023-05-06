@@ -55,7 +55,7 @@ public class DatabaseController {
             e.printStackTrace();
         }
     }
-    public boolean updateUser(String newFName, String newLName, String newEmail, String newPassword, String currentUserEmail) {
+    public static boolean updateUser(String newFName, String newLName, String newEmail, String newPassword, String currentUserEmail) {
         String query = "UPDATE user SET fname = IFNULL(NULLIF(?, ''), fname), lname = IFNULL(NULLIF(?, ''), lname), email = IFNULL(NULLIF(?, ''), email), password = IFNULL(NULLIF(?, ''), password) WHERE email = ?";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

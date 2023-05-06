@@ -1,17 +1,11 @@
 package org.exploremore;
-
+//Partial code and comments by Clay Remen
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-
+import java.util.Random;
 public class LoginPage implements ActionListener {
-
+	//Initilization of UI elements
 	JFrame frame = new JFrame();
 	JLabel logLabel = new JLabel("Login");
 	JButton loginButton = new JButton("Login");
@@ -22,8 +16,9 @@ public class LoginPage implements ActionListener {
 	JLabel userIDLabel = new JLabel("userID:");
 	JLabel userPasswordLabel = new JLabel("password:");
 	JLabel messageLabel = new JLabel();
-
+	private int counter = 0;
 	LoginPage() {
+		//Implementation of UI elements
 
 		logLabel.setBounds(0,0,300,35);
 		logLabel.setFont(new Font(null,Font.PLAIN,30));
@@ -68,35 +63,57 @@ public class LoginPage implements ActionListener {
 		frame.add(userPasswordField);
 		frame.add(loginButton);
 		frame.add(registerButton);
+		frame.add(resetPasswordButton);
 		frame.getContentPane().setBackground(Color.darkGray);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(420, 330);
 		frame.setLayout(null);
 		frame.setVisible(true);
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == loginButton) {
+
+		if (e.getSource() == loginButton) { //Checks to see whether user is within the database and logs them in if they are
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
 			User user = new User(null,null,userID,password);
 			if (DatabaseController.validateUser(userID, password)) {
 				messageLabel.setForeground(Color.green);
-				messageLabel.setText("Logging IN");
+				messageLabel.setText("Login successful");
 				MainPage mainPage = new MainPage(user);
 				frame.dispose(); // Close the LoginPage frame
-			} else {
+
+			} else {  //Begins a counter whenever a user enter the wrong values
+				counter++;
+				messageLabel.setBounds(10,250,1000,35);
 				messageLabel.setForeground(Color.red);
-				messageLabel.setText("Invalid Info");
+				messageLabel.setText("Invalid email or password");
+
+			}
+			if (counter >= 10){ //Once the counter gets up to 10 it performs and account lock where the user is no longer
+				String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //allowed to log in and has their password randomized
+				StringBuilder sb = new StringBuilder();
+				Random random = new Random();
+				String newPass = " ";
+				for (int i=0; i <= 8; i++){
+					int counter = random.nextInt(alphabet.length());
+					char rand = alphabet.charAt(counter);
+					sb.append(rand);
+				}
+				newPass = sb.toString();
+				messageLabel.setBounds(10,250,1000,35);
+				messageLabel.setText("Incorrect Login Account Locked.");
+				boolean updatePass = DatabaseController.updateUser(null,null,null,newPass,userID);
+				messageLabel.setText("User password has been changed please reset password" );
+				loginButton.setEnabled(false);
 			}
 		}
 
-		if (e.getSource() == registerButton) {
+		if (e.getSource() == registerButton) { //Takes the user to the register page
 			RegisterPage registerPage = new RegisterPage();
 			frame.dispose();
 		}
-		if (e.getSource() == resetPasswordButton) {
+		if (e.getSource() == resetPasswordButton) { //Takes the user to the resset password page
 			ResetPassword resetPassword = new ResetPassword();
 			frame.dispose();
 		}
