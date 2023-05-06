@@ -40,8 +40,10 @@ public class ExportController extends JFrame implements ActionListener{
         //getContentPane().add(linkEmail);
         getContentPane().add(downloadButton);
 
-        setSize(400, 200);
+        setSize(380, 190);
+        //to display it
         setVisible(true);
+        //
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

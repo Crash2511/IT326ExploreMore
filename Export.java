@@ -19,9 +19,10 @@ import java.net.URI;
 import java.awt.event.ItemEvent;
 
 public class Export extends JLabel{
-    private String url;
-    private String html = "<html><a href=''>%s</a></html>";
 
+    private String htmlStuff = "<html><a href=''>%s</a></html>";
+
+    private String httpURL;
     public Object[][] data;
 
     public Export(String text) {
@@ -33,12 +34,12 @@ public class Export extends JLabel{
     }
 
     public void setURL(String url) {
-        this.url = url;
+        this.httpURL = url;
     }
 
     public Export(String text, String url, String tooltip) {
         super(text);
-        this.url = url;
+        this.httpURL = url;
 
         setForeground(Color.BLUE.darker());
 
@@ -51,7 +52,7 @@ public class Export extends JLabel{
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                setText(String.format(html, text));
+                setText(String.format(htmlStuff, text));
             }
 
             @Override
@@ -63,7 +64,7 @@ public class Export extends JLabel{
             public void mouseClicked(MouseEvent e) {
                 try {
 
-                    Desktop.getDesktop().browse(new URI(Export.this.url));
+                    Desktop.getDesktop().browse(new URI(Export.this.httpURL));
 
                 } catch (IOException | URISyntaxException e1) {
                     JOptionPane.showMessageDialog(Export.this,
@@ -77,93 +78,86 @@ public class Export extends JLabel{
 
     }
 
-    private static boolean convertToHTML(final String src,
-                                            final String dst, String... headText) {
+    private boolean convertToHTML(String src, String dst, String... header) {
 
-        String headTxt = "";
-        if (headText.length != 0) {
-            headTxt = headText[0];
+        String headerText = null;
+        if (header.length != 0) {
+            headerText = header[0];
         }
 
 
         BufferedReader input;
         try {
-            input = new BufferedReader(new FileReader(src));
-            if (!input.ready()) { throw new IOException(); }
+            input = new BufferedReader(
+                    new FileReader(src));
+            if (!input.ready()) {
+                throw new IOException(); }
         }
         catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,"File Write Error", "Error when writing to a file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"File Write Error: ", "Did not write to file", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"File Write Error", "Error when writing to a file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"File Write Error: ", "Did not write to file", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
-
-        ArrayList<String> txt = new ArrayList<>();
-        txt.add("<html>");
-        txt.add("<head>");
-        txt.add(headTxt);
-        txt.add("</head>");
-        txt.add("<body>");
-
+        ArrayList<String> text = new ArrayList<>();
+        text.add("<html>");
+        text.add("<head>");
+        text.add(headerText);
+        text.add("</head>");
+        text.add("<body>");
         try {
-            String str;
-            while((str = input.readLine()) != null){
-                txt.add("<p>" + str + "</p>");
-            }
+            String temp;
+            while((temp = input.readLine()) != null){
+                text.add("<p>" + temp + "</p>");}
             input.close();
         }
         catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"File Write Error", "Error when writing to a file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"File Write Error: ", "Did not write to file", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
-        // Place our HTML finishing Tags into our String ArrayList...
-        txt.add("</body>");
-        txt.add("</html>");
-
-        // Write the String ArrayList to our supplied Destination
-        // File Path...
+        text.add("</body>");
+        text.add("</html>");
         try {
             FileWriter fw = new FileWriter(dst);
-            Writer output = new BufferedWriter(fw);
+            Writer w = new BufferedWriter(fw);
 
-            for (int i = 0; i < txt.size(); i++) {
+            for (int i = 0; i < text.size(); i++) {
 
-                output.write(txt.get(i) + "\r\n");
+                w.write(text.get(i) + "\n");
             }
-            output.close();
+            w.close();
             return true;
         }
         catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"File Write Error", "Error when writing to a file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"File Write Error: ", "Did not write to file", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
     public void fileToConvert(){
-
-        boolean success = convertToHTML("schedule.txt", "Schedule.html", "Schedule");
-        if (success) {
-            System.out.println("Text File Made!");
+        //converts file in from .txt to .HTML
+        boolean converted = convertToHTML("schedule.txt", "Schedule.html", "Schedule");
+        if (converted) {
+            System.out.println("HTML file made!");
         }
         else {
-            System.out.println("ERROR! Text File not made.");
+            System.out.println("ERROR! HTML file not made...");
         }
         /*try {
             File htmlFile = new File("Schedule.html");
             Desktop.getDesktop().browse(htmlFile.toURI());
-        } catch (IOException ex) {}*/
+        } catch (IOException ex) {
+        }*/
     }
 
 
     public void download() throws IOException {
         try {
-            File myObj = new File("schedule.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
+            File f = new File("schedule.txt");
+            if (f.createNewFile()) {
+                System.out.println("File made: " + f.getName());
             } else {
                 System.out.println("File already exists.");
             }
@@ -183,16 +177,16 @@ public class Export extends JLabel{
 
         try {
             FileWriter fw = new FileWriter("schedule.txt");
-            Writer output = new BufferedWriter(fw);
+            Writer w = new BufferedWriter(fw);
 
             for (int i = 0; i < txt.size(); i++) {
-                output.write(txt.get(i));
+                w.write(txt.get(i));
             }
-            output.close();
+            w.close();
 
         }
         catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"File Write Error", "Error when writing to a file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"File Write Error: ", "Did not write to file", JOptionPane.ERROR_MESSAGE);
 
         }
         //System.out.println("WE MADE IT");
