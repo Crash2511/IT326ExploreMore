@@ -121,6 +121,4 @@ public class RegisterPage implements ActionListener {
 			frame.dispose(); // Close the RegisterPage frame
 		}
 	}
-
-
 }

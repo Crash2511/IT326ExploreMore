@@ -1,12 +1,9 @@
-// DatabaseHandler.java
 package org.exploremore;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 public class DatabaseController {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/jdbcdemo";
     private static final String DB_USER = "explorer";
@@ -16,7 +13,6 @@ public class DatabaseController {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
-
     public static boolean isEmailAlreadyRegistered(String email) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email = ?")) {
@@ -30,7 +26,6 @@ public class DatabaseController {
             return false;
         }
     }
-
     public static boolean validateUser(String email, String password) {
         boolean isValid = false;
 
@@ -44,32 +39,26 @@ public class DatabaseController {
             statement.setString(1, email);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
                 isValid = true;
             }
-
             connection.close();
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println(ex);
         }
-
         return isValid;
     }
 
 
     public static void insertUser(User user) {
         String insertSql = "INSERT INTO user (fname, lname, email, password) VALUES (?, ?, ?, ?)";
-
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
-
             preparedStatement.setString(1, user.getFname());
             preparedStatement.setString(2, user.getLname());
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.executeUpdate();
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

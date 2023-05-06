@@ -20,8 +20,8 @@ public class UpdateUser implements ActionListener {
     JLabel newPasswordLabel = new JLabel("New Password:");
     JLabel messageLabel = new JLabel();
     String userEmail;
-    UpdateUser(String email) {
-        userEmail = email;
+    UpdateUser() {
+        //userEmail = email;
         newFNameLabel.setBounds(50, 50, 150, 25);
         newLNameLabel.setBounds(50, 100, 150, 25);
         newEmailLabel.setBounds(50, 150, 150, 25);
