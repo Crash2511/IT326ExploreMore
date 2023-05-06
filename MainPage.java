@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class MainPage implements ActionListener{
+	User user;
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame frame = new JFrame();
 	JLabel logoLabel = new JLabel("ExploreMore");
@@ -45,10 +46,12 @@ public class MainPage implements ActionListener{
 	Boolean[] filterStatus ={false, false, false, false, false, false, false, false};
 
 
-	MainPage(String userID){
+	MainPage(User user){
+		this.user = user;
+
 		logoLabel.setBounds(0,0,300,35);
 		logoLabel.setFont(new Font(null,Font.PLAIN,35));
-		logoLabel.setText(userID);
+		logoLabel.setText(user.getEmail());
 		logoLabel.setForeground(Color.white);
 
 		// search bar for location
@@ -291,7 +294,7 @@ public class MainPage implements ActionListener{
 		}
 		if(e.getSource()==updateUserButton) {
 			frame.dispose();
-			UpdateUser updateUser = new UpdateUser();
+			UpdateUser updateUser = new UpdateUser(user);
 		}
 		if(e.getSource()==deleteUserButton) {
 			frame.dispose();
@@ -357,7 +360,5 @@ public class MainPage implements ActionListener{
 				filterStatus[7] = false;
 			}
 		}
-
-
 	}
 }

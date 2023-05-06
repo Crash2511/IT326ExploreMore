@@ -37,28 +37,14 @@ public class DeleteUser implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == deleteButton) {
             String email = emailField.getText().trim();
-
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/jdbcdemo", "explorer", "rhett"
-                );
-                String query = "DELETE FROM user WHERE email = ?";
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.setString(1, email);
-                int rowsAffected = statement.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    messageLabel.setForeground(Color.green);
-                    messageLabel.setText("User Deleted");
-                } else {
-                    messageLabel.setForeground(Color.red);
-                    messageLabel.setText("Failed");
-                }
-
-                connection.close();
-            } catch (ClassNotFoundException | SQLException ex) {
-                System.out.println(ex);
+            DatabaseController dbHandler = new DatabaseController();
+            boolean success = dbHandler.deleteUser(email);
+            if (success) {
+                messageLabel.setForeground(Color.green);
+                messageLabel.setText("User Deleted");
+            } else {
+                messageLabel.setForeground(Color.red);
+                messageLabel.setText("Failed");
             }
         }
     }

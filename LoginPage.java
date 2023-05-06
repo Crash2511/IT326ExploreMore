@@ -1,9 +1,7 @@
 package org.exploremore;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
 public class LoginPage implements ActionListener {
 	JFrame frame = new JFrame();
 	JButton loginButton = new JButton("Login");
@@ -51,11 +49,11 @@ public class LoginPage implements ActionListener {
 		if (e.getSource() == loginButton) {
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
-
+			User user = new User(null,null,userID,password);
 			if (DatabaseController.validateUser(userID, password)) {
 				messageLabel.setForeground(Color.green);
 				messageLabel.setText("Login successful");
-				MainPage mainPage = new MainPage(userID);
+				MainPage mainPage = new MainPage(user);
 				frame.dispose(); // Close the LoginPage frame
 			} else {
 				messageLabel.setForeground(Color.red);
@@ -67,7 +65,6 @@ public class LoginPage implements ActionListener {
 			RegisterPage registerPage = new RegisterPage();
 			frame.dispose();
 		}
-
 		if (e.getSource() == resetPasswordButton) {
 			ResetPassword resetPassword = new ResetPassword();
 			frame.dispose();
