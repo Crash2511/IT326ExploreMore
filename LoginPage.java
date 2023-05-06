@@ -12,6 +12,8 @@ public class LoginPage implements ActionListener {
 	JLabel userIDLabel = new JLabel("userID:");
 	JLabel userPasswordLabel = new JLabel("password:");
 	JLabel messageLabel = new JLabel();
+	JLabel titleLabel = new JLabel("Login");
+
 
 	LoginPage() {
 		userIDLabel.setBounds(50, 100, 75, 25);
@@ -29,7 +31,9 @@ public class LoginPage implements ActionListener {
 		resetPasswordButton.setBounds(125, 175, 100, 25);
 		resetPasswordButton.setFocusable(false);
 		resetPasswordButton.addActionListener(this);
-
+		titleLabel.setBounds(180, 50, 60, 25);
+		titleLabel.setFont(new Font(null, Font.BOLD, 20));
+		frame.add(titleLabel);
 		frame.add(userIDLabel);
 		frame.add(userPasswordLabel);
 		frame.add(messageLabel);
@@ -52,12 +56,12 @@ public class LoginPage implements ActionListener {
 			User user = new User(null,null,userID,password);
 			if (DatabaseController.validateUser(userID, password)) {
 				messageLabel.setForeground(Color.green);
-				messageLabel.setText("Login successful");
+				messageLabel.setText("Logging IN");
 				MainPage mainPage = new MainPage(user);
 				frame.dispose(); // Close the LoginPage frame
 			} else {
 				messageLabel.setForeground(Color.red);
-				messageLabel.setText("Invalid email or password");
+				messageLabel.setText("Invalid Info");
 			}
 		}
 

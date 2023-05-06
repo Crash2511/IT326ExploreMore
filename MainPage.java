@@ -48,9 +48,9 @@ public class MainPage implements ActionListener{
 
 	MainPage(User user){
 		this.user = user;
-
+		//shows whos logged in
 		logoLabel.setBounds(0,0,300,35);
-		logoLabel.setFont(new Font(null,Font.PLAIN,35));
+		logoLabel.setFont(new Font(null,Font.PLAIN,15));
 		logoLabel.setText(user.getEmail());
 		logoLabel.setForeground(Color.white);
 
