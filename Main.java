@@ -1,16 +1,17 @@
-package em;
+package org.exploremore;
 // main application for exploreMore
 // note: change class name to app name
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Main {
-
 	public static void main(String[] args) {
-		
-		IDandPassword idandPassword = new IDandPassword();
-				
-		
-		RegisterPage registerPage = new RegisterPage(idandPassword.getLoginInfo());
 
+		//initial login page
+		LoginPage loginPage = new LoginPage();
 	}
 }
+
 
