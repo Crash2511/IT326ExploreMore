@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class MainPage implements ActionListener{
+	User user;
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame frame = new JFrame();
 	JLabel logoLabel = new JLabel("ExploreMore");
@@ -26,6 +27,8 @@ public class MainPage implements ActionListener{
 	JButton createAvailability = new JButton("Create Availability");
 	JButton listViewButton = new JButton("List View");
 	JButton logoutButton = new JButton("Logout");
+	JButton updateUserButton = new JButton("UPDATE");
+	JButton deleteUserButton = new JButton("DELETE");
 	JTextField searchTxtField = new JTextField();
 	JLabel searchLabel = new JLabel("Search Location");
 	JCheckBox restaurants = new JCheckBox("Restaurant", false);
@@ -43,9 +46,9 @@ public class MainPage implements ActionListener{
 	Boolean[] filterStatus ={false, false, false, false, false, false, false, false};
 
 
-	MainPage(String userID){
+	MainPage(User user){
 
-
+		this.user = user;
 		logoLabel.setBounds(0,0,300,35);
 		logoLabel.setFont(new Font(null,Font.PLAIN,35));
 		logoLabel.setText("ExploreMore");
@@ -83,6 +86,19 @@ public class MainPage implements ActionListener{
 		logoutButton.addActionListener(this);
 		logoutButton.setBackground(Color.black);
 		logoutButton.setForeground(Color.white);
+
+		// update user
+		updateUserButton.setBounds(0,80,100,30);
+		updateUserButton.setFocusable(false);
+		updateUserButton.addActionListener(this);
+		updateUserButton.setBackground(Color.black);
+		updateUserButton.setForeground(Color.white);
+		// delete user
+		deleteUserButton.setBounds(0,110,100,30);
+		deleteUserButton.setFocusable(false);
+		deleteUserButton.addActionListener(this);
+		deleteUserButton.setBackground(Color.black);
+		deleteUserButton.setForeground(Color.white);
 
 		// select filters
 		logLabel.setBounds((screenSize.width/2)+670,50,300,35);
@@ -155,6 +171,8 @@ public class MainPage implements ActionListener{
 		frame.add(createAvailability);
 		frame.add(listViewButton);
 		frame.add(logoutButton);
+		frame.add(updateUserButton);
+		frame.add(deleteUserButton);
 		frame.getContentPane().setBackground(Color.darkGray);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(screenSize.width, screenSize.height);
@@ -277,7 +295,15 @@ public class MainPage implements ActionListener{
 		if(e.getSource()==logoutButton) {
 			frame.dispose();
 			IDandPassword idandPassword = new IDandPassword();
-			LoginPage loginPage = new LoginPage(idandPassword.getLoginInfo());
+			LoginPage loginPage = new LoginPage();
+		}
+		if(e.getSource()==updateUserButton) {
+			frame.dispose();
+			UpdateUser updateUser = new UpdateUser(user);
+		}
+		if(e.getSource()==deleteUserButton) {
+			frame.dispose();
+			DeleteUser deleteUser = new DeleteUser();
 		}
 	}
 

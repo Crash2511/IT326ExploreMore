@@ -46,9 +46,7 @@ public class RegisterPage implements ActionListener {
 	JLabel messageLabel = new JLabel();
 	HashMap<String,String> registerinfo = new HashMap<String,String>();
 
-	RegisterPage(HashMap<String,String> registerInfoOriginal){
-
-		registerinfo = registerInfoOriginal;
+	RegisterPage(){
 
 		regLabel.setBounds(175, 10, 300, 35);
 		regLabel.setFont(new Font(null, Font.PLAIN, 30));
@@ -193,8 +191,7 @@ public class RegisterPage implements ActionListener {
 		}
 
 		if (e.getSource() == loginButton) {
-			IDandPassword idandPassword = new IDandPassword();
-			LoginPage loginPage = new LoginPage(idandPassword.getLoginInfo());
+			LoginPage loginPage = new LoginPage();
 			frame.dispose(); // Close the RegisterPage frame
 		}
 	}

@@ -17,15 +17,13 @@ public class LoginPage implements ActionListener {
 	JButton loginButton = new JButton("Login");
 	JButton registerButton = new JButton("Register");
 	JTextField userIDField = new JTextField();
+	JButton resetPasswordButton = new JButton("ResetPW");
 	JPasswordField userPasswordField = new JPasswordField();
 	JLabel userIDLabel = new JLabel("userID:");
 	JLabel userPasswordLabel = new JLabel("password:");
 	JLabel messageLabel = new JLabel();
 
-	HashMap<String, String> logininfo;
-
-	LoginPage(HashMap<String, String> loginInfoOriginal) {
-		logininfo = loginInfoOriginal;
+	LoginPage() {
 
 		logLabel.setBounds(0,0,300,35);
 		logLabel.setFont(new Font(null,Font.PLAIN,30));
@@ -56,6 +54,12 @@ public class LoginPage implements ActionListener {
 		registerButton.setBackground(Color.black);
 		registerButton.setForeground(Color.white);
 
+		resetPasswordButton.setBounds(125, 175, 100, 25);
+		resetPasswordButton.setFocusable(false);
+		resetPasswordButton.addActionListener(this);
+		resetPasswordButton.setBackground(Color.black);
+		resetPasswordButton.setForeground(Color.white);
+
 		frame.add(logLabel);
 		frame.add(userIDLabel);
 		frame.add(userPasswordLabel);
@@ -76,38 +80,25 @@ public class LoginPage implements ActionListener {
 		if (e.getSource() == loginButton) {
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
-
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection connection = DriverManager.getConnection(
-						//jdbcdemo=database name.  explorer=username for admin.   rhett=password for admin    localhost=connection
-						"jdbc:mysql://localhost:3306/jdbcdemo", "explorer", "rhett"
-				);
-
-				String query = "SELECT * FROM user WHERE email = ? AND password = ?";
-				PreparedStatement statement = connection.prepareStatement(query);
-				statement.setString(1, userID);
-				statement.setString(2, password);
-				ResultSet resultSet = statement.executeQuery();
-
-				if (resultSet.next()) {
-					messageLabel.setForeground(Color.green);
-					messageLabel.setText("Login successful");
-					MainPage mainPage = new MainPage(userID);
-					frame.dispose(); // Close the RegisterPage frame
-				} else {
-					messageLabel.setForeground(Color.red);
-					messageLabel.setText("Invalid email or password");
-				}
-				connection.close();
-			} catch (ClassNotFoundException | SQLException ex) {
-				System.out.println(ex);
+			User user = new User(null,null,userID,password);
+			if (DatabaseController.validateUser(userID, password)) {
+				messageLabel.setForeground(Color.green);
+				messageLabel.setText("Logging IN");
+				MainPage mainPage = new MainPage(user);
+				frame.dispose(); // Close the LoginPage frame
+			} else {
+				messageLabel.setForeground(Color.red);
+				messageLabel.setText("Invalid Info");
 			}
 		}
+
 		if (e.getSource() == registerButton) {
-			IDandPassword idandPassword = new IDandPassword();
-			RegisterPage registerPage = new RegisterPage(idandPassword.getLoginInfo());
-			frame.dispose(); // Close the LoginPage frame
+			RegisterPage registerPage = new RegisterPage();
+			frame.dispose();
+		}
+		if (e.getSource() == resetPasswordButton) {
+			ResetPassword resetPassword = new ResetPassword();
+			frame.dispose();
 		}
 	}
 }
