@@ -4,12 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
-import javax.mail.Session;
-import javax.mail.Transport;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import java.util.Properties;
 
 class ResetPassword extends JFrame implements ActionListener {
     //Initilization of UI elements
@@ -111,61 +109,37 @@ class ResetPassword extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == resetPasswordButton) { //Method for sending an email to user for reset code
-
-            String senderEmail = "exploremoreIT@gmail.com";
-            String senderPassword = "avxbugzltgtvlgdb";
-
-            // Recipient's email address
-            userEmail = userEmailField.getText();
+            String senderEmail = "exploremore326@gmail.com";
+            String senderPassword = "vsamkvsdgruljrqx";
+            String userEmail = userEmailField.getText();
             nextButton.setEnabled(true);
-            // Email properties
-            Properties properties = new Properties();
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.starttls.enable", "true");
-            properties.put("mail.smtp.host", "smtp.gmail.com");
-            properties.put("mail.smtp.port", "587");
-            properties.put("mail.smtp.ssl.protocols", "TLSv1.2"); // Specify the TLS protocol version
 
-            // Enable SSL debugging
-            properties.put("mail.debug", "true");
+            JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-            // Create a session with authentication
-            Session session = Session.getInstance(properties, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(senderEmail, senderPassword);
-                }
-            });
+            mailSender.setHost("smtp.gmail.com");
+            mailSender.setPort(587);
+            mailSender.setUsername("exploremoreIT@gmail.com"); // your Gmail username
+            mailSender.setPassword("avxbugzltgtvlgdb"); // your Gmail password
 
-            try {
+            Properties props = mailSender.getJavaMailProperties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.debug", "true");
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setFrom(senderEmail);
+            mailMessage.setTo(userEmail);
+            mailMessage.setSubject("Password Reset");
 
-                // Create a default MimeMessage object
-                MimeMessage message = new MimeMessage(session);
+            String content = "Hello,\n\n";
+            content += "Your password reset code is: " + randomNumber + "\n\n";
+            content += "Please use this code to reset your password.\n\n";
+            content += "Best regards,\n";
+            content += "The explore more team";
+            mailMessage.setText(content);
 
-                // Set the sender's email address
-                message.setFrom(new InternetAddress(senderEmail));
-
-                // Set the recipient's email address
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(userEmail));
-
-                // Set the subject
-                message.setSubject("Password Reset");
-
-                // Set the content of the message
-                String content = "Hello,\n\n";
-                content += "Your password reset code is: " + randomNumber + "\n\n";
-                content += "Please use this code to reset your password.\n\n";
-                content += "Best regards,\n";
-                content += "The explore more team";
-                message.setText(content);
-
-                // Send the email
-                Transport.send(message);
-
-                System.out.println("Password reset email sent successfully!");
-            } catch (MessagingException d) {
-                d.printStackTrace();
-            }
+            mailSender.send(mailMessage);
+            System.out.println("Password reset email sent successfully!");
 
 
         }
