@@ -112,8 +112,8 @@ class ResetPassword extends JFrame implements ActionListener {
 
         if (e.getSource() == resetPasswordButton) { //Method for sending an email to user for reset code
 
-            String senderEmail = "exploremore326@gmail.com";
-            String senderPassword = "vsamkvsdgruljrqx";
+            String senderEmail = "exploremoreIT@gmail.com";
+            String senderPassword = "avxbugzltgtvlgdb";
 
             // Recipient's email address
             userEmail = userEmailField.getText();
